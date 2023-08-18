@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import './App.css';
 
-const apiUrl = 'https://ai-weather-by-meteosource.p.rapidapi.com/hourly?place_id=temuco&timezone=auto&language=es&units=auto';
-const options = {
+const apiUrl = 'https://ai-weather-by-meteosource.p.rapidapi.com/hourly?place_id=temuco&timezone=auto&language=es&units=auto'; //Obtiene los datos desde la API
+const options = {                                                                                                              //Le pasa las credenciales para consumir la API
 	method: 'GET',
 	headers: {
 		'X-RapidAPI-Key': '25d9ee2d37msh5bba4fb65ba123cp17b0a8jsn171927139a21',
