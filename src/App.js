@@ -1,21 +1,37 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import './App.css';
 
-const GIFS = [
-  'https://media0.giphy.com/media/uEfZWPFl4cwFuxeUt7/giphy.gif?cid=ecf05e47ij5vrv6jvyoi66plefaumle2rogg4atj4wpdzw83&ep=v1_gifs_gifId&rid=giphy.gif&ct=g',
-  'https://media2.giphy.com/media/LEoirCu9tBtIXAakxN/giphy.gif?cid=ecf05e477sjewxa60mdnefyetglazdl7swr4e379rmm9fkew&ep=v1_gifs_related&rid=giphy.gif&ct=g'
-]
+const apiUrl = 'https://ai-weather-by-meteosource.p.rapidapi.com/hourly?place_id=temuco&timezone=auto&language=es&units=auto';
+const options = {
+	method: 'GET',
+	headers: {
+		'X-RapidAPI-Key': '25d9ee2d37msh5bba4fb65ba123cp17b0a8jsn171927139a21',
+		'X-RapidAPI-Host': 'ai-weather-by-meteosource.p.rapidapi.com'
+	}
+};
 
-const DIFERENTS_GIFS = [
-  'https://media4.giphy.com/media/4rftPhywAd24ZbLFSU/giphy.webp',
-  'https://media1.giphy.com/media/S8DcNuvt1FUy31LUH6/giphy.webp',
-  'https://media4.giphy.com/media/X5p8ANnYSerdA6KHsw/giphy.webp'
-]
 
 function App() {
   //Cambia de un estado a otro (useState está por defecto en el array GIFS, 
   //al usar setGifs se pasa el array DIFERENTS_GIFS a useState)
-  const [gifs, setGifs] = useState(GIFS)
+  const [gifs, setGifs] = useState([])
+
+  
+  useEffect(function () {                           //Se ejecuta cada que cambia el useState (cada que se vuelve a renderizar algo)
+
+    fetch(apiUrl, options)                          // Hacer una solicitud a la URL apiUrl con las opciones definidas en options
+      .then(res => res.json())
+      .then(response => {
+        const hourlyData = response.hourly.data     // Accedes al array 'data' dentro de 'hourly'
+        const tempPerHours = hourlyData.map(entry => entry.temperature)
+
+        console.log(tempPerHours)
+      })
+      .catch(error => {
+        console.error(error)                        // Manejar cualquier error que ocurra durante la solicitud o el procesamiento
+      })
+  }, 
+  [])
 
   return (
     <div className="App">
@@ -25,10 +41,6 @@ function App() {
           gifs.map(singleGif => <img src={singleGif} />)
         }
 
-        {
-          //Al dar clic en el botón este renderiza los gifs del array DIFERENTS_GIFS
-        }
-        <button onClick={() => setGifs(DIFERENTS_GIFS)}>Cambiar Gifs</button>
       </section>
     </div>
   );
